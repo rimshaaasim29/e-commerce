@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aurelia Jewels</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Theme: cosmic latte + mocha cream + deep burgundy. Change colours here only. */
+:root{--sage:#5b1a2e;--sage-d:#5b1a2e;--sage-l:#fff8e7;--concrete:#8a7466;--concrete-d:#2b1a1c;--concrete-l:#eadfc9;--amber:#9a6a4a;--amber-d:#7d5238;--bg:#fff8e7;--mocha:#d8bfa3;--cream:#efe2cc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--concrete-d);line-height:1.6}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.15}
+a{color:inherit;text-decoration:none}
+.container{max-width:1160px;margin:0 auto;padding:0 20px}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(255,248,231,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--concrete-l)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--sage-d)}
+.logo span{color:var(--amber)}
+.links{display:flex;gap:26px;align-items:center}
+.links a{font-size:.92rem;font-weight:500}
+.links a:hover{color:var(--amber)}
+.cart-btn{background:var(--amber);color:#fff;border:0;padding:9px 16px;border-radius:30px;font-weight:600;cursor:pointer;font-size:.88rem}
+.cart-btn:hover{background:var(--amber-d)}
+.menu-toggle{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer}
+/* hero */
+#home{position:relative;min-height:100vh;display:flex;align-items:center;background:var(--bg);padding:110px 0 70px;overflow:hidden}
+.hero-rings{position:absolute;right:-180px;top:50%;width:760px;height:760px;margin-top:-380px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 62px,rgba(154,106,74,.2) 63px 64px);pointer-events:none}
+.hero-orb{position:absolute;left:-140px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:var(--cream);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:50px;align-items:center}
+.hero-text{max-width:600px}
+.eyebrow{letter-spacing:.25em;text-transform:uppercase;font-size:.75rem;color:var(--amber);font-weight:600;margin-bottom:14px}
+.hero-text h1{font-size:clamp(2.9rem,6.2vw,5rem);color:var(--sage-d);margin-bottom:20px}
+.hero-text h1 em{font-style:italic;color:var(--amber)}
+.hero-text p{color:#5a4244;margin-bottom:30px;max-width:460px;font-size:1.02rem}
+.hero-text .btn{background:var(--sage-d);color:#fff8e7}
+.hero-text .btn:hover{background:#431222}
+.hero-text .btn.ghost{background:transparent;color:var(--sage-d)}
+.hero-text .btn.ghost:hover{background:var(--sage-d);color:#fff8e7}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:34px;padding-top:22px;border-top:1px solid var(--mocha);font-size:.82rem;color:#5a4244;max-width:520px}
+.hero-badges span::before{content:"✦";color:var(--amber);margin-right:7px}
+.hero-panel{background:rgba(255,255,255,.6);border:1px solid var(--mocha);border-radius:22px;padding:30px 28px;box-shadow:0 24px 60px rgba(91,26,46,.12)}
+.hero-panel .ptitle{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--sage-d);margin-bottom:4px}
+.hero-panel .psub{font-size:.82rem;color:var(--concrete);margin-bottom:14px}
+.cat-link{display:flex;align-items:center;gap:16px;padding:16px 8px;border-top:1px solid var(--mocha);font-weight:500;transition:padding .2s,background .2s}
+.cat-link span{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--amber);width:30px}
+.cat-link i{margin-left:auto;font-style:normal;color:var(--sage-d)}
+.cat-link:hover{background:var(--cream);padding-left:16px}
+.btn{display:inline-block;background:var(--amber);color:#fff;padding:13px 28px;border-radius:30px;font-weight:600;border:0;cursor:pointer;font-size:.95rem}
+.btn:hover{background:var(--amber-d)}
+.btn.ghost{background:transparent;color:var(--sage-d);border:1.5px solid var(--sage-d);margin-left:10px}
+.btn.ghost:hover{background:var(--sage-d);color:#fff}
+section{padding:90px 0}
+.sec-title{text-align:center;margin-bottom:46px}
+.sec-title h2{font-size:clamp(2rem,4vw,2.9rem);color:var(--sage-d)}
+.sec-title p{color:var(--concrete);margin-top:6px}
+/* about */
+#about{background:var(--sage)}
+#about .grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+#about h2{color:#fff;font-size:clamp(2rem,4vw,2.9rem);margin-bottom:16px}
+#about p{color:#f6ebdc;margin-bottom:14px}
+.stats{display:flex;gap:30px;margin-top:22px}
+.stats b{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:#fff;display:block}
+.stats span{font-size:.8rem;color:#ead9c4}
+.about-card{background:var(--concrete-l);border-radius:20px;padding:40px;text-align:center;border:1px solid var(--concrete-l)}
+#about .about-card p{color:#5a4244;margin:0}
+.about-card h3{font-size:1.8rem;color:var(--amber);margin-bottom:8px}
+/* products */
+.cat{margin-bottom:60px}
+.cat h3{font-size:2rem;color:var(--sage-d);margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.cat h3::after{content:"";flex:1;height:1px;background:var(--concrete-l)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:24px}
+.card{background:#fff;border-radius:6px;overflow:hidden;border:1px solid var(--concrete-l)}
+.img{aspect-ratio:1/1;background:linear-gradient(135deg,var(--cream),#dccdb5);display:flex;align-items:center;justify-content:center;color:var(--concrete);font-size:.85rem;overflow:hidden}
+.img img{width:100%;height:100%;object-fit:cover}
+.info{padding:16px}
+.info h4{font-size:1rem;font-weight:600}
+.info p{font-size:.82rem;color:var(--concrete);min-height:36px}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.price{font-weight:700;color:var(--amber);font-size:1.05rem}
+.add{background:var(--sage-d);color:#fff;border:0;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:.82rem;font-weight:600}
+.add:hover{background:var(--amber)}
+.add[disabled]{background:var(--concrete);cursor:not-allowed}
+.stock{font-size:.72rem;color:var(--concrete)}
+/* contact */
+#contact{background:var(--cream)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.contact-box{background:#fff;border-radius:16px;padding:30px}
+.contact-box p{margin:8px 0}
+.contact-box b{color:var(--sage-d)}
+input,textarea,select{width:100%;padding:11px 13px;border:1px solid #dccdb5;border-radius:10px;font-family:inherit;font-size:.92rem;margin-bottom:10px;background:#fff}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--sage);border-color:var(--sage)}
+footer{background:var(--concrete-d);color:#d9c8b0;padding:50px 0 24px}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px;margin-bottom:30px}
+footer h4{color:#fff;margin-bottom:10px;font-family:'Cormorant Garamond',serif;font-size:1.3rem}
+footer a{display:block;font-size:.9rem;margin:5px 0}
+footer a:hover{color:var(--amber)}
+.copy{border-top:1px solid #5a4244;padding-top:18px;text-align:center;font-size:.8rem}
+/* cart */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:90;display:none}
+.overlay.open{display:block}
+.drawer{position:fixed;top:0;right:-440px;width:min(420px,100%);height:100%;background:#fff;z-index:100;display:flex;flex-direction:column}
+.drawer.open{right:0}
+.drawer header{padding:18px 20px;border-bottom:1px solid var(--concrete-l);display:flex;justify-content:space-between;align-items:center}
+.drawer header h3{font-size:1.5rem}
+.x{background:none;border:0;font-size:1.5rem;cursor:pointer}
+.cart-items{flex:1;overflow:auto;padding:14px 20px}
+.ci{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--concrete-l)}
+.ci .t{width:54px;height:54px;border-radius:8px;background:var(--concrete-l);overflow:hidden;flex-shrink:0}
+.ci .t img{width:100%;height:100%;object-fit:cover}
+.ci .m{flex:1;font-size:.88rem}
+.qty button{width:24px;height:24px;border-radius:50%;border:1px solid var(--concrete);background:#fff;cursor:pointer}
+.drawer footer{background:#fff;color:inherit;padding:16px 20px;border-top:1px solid var(--concrete-l)}
+.tot{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px}
+.modal{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:18px;padding:26px;width:min(480px,100%);max-height:92vh;overflow:auto}
+.mbox h3{font-size:1.7rem;margin-bottom:12px;color:var(--sage-d)}
+.pay{display:flex;gap:10px;margin-bottom:10px}
+.pay label{flex:1;border:1.5px solid #dccdb5;border-radius:10px;padding:10px;cursor:pointer;font-size:.88rem;display:flex;gap:8px;align-items:center}
+.pay input{width:auto;margin:0}
+.pay label:has(input:checked){border-color:var(--amber);background:#f7ebdc}
+.note{font-size:.8rem;color:var(--concrete);margin-bottom:12px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--concrete-d);color:#fff;padding:12px 22px;border-radius:30px;z-index:200;font-size:.9rem;display:none}
+@media(max-width:800px){
+ .menu-toggle{display:block}
+ .links{position:absolute;top:68px;left:0;right:0;background:var(--bg);flex-direction:column;padding:18px;display:none;border-bottom:1px solid var(--concrete-l)}
+ .links.open{display:flex}
+ #about .grid,.contact-grid,.foot{grid-template-columns:1fr}
+ #home{min-height:auto;padding:96px 0 50px}
+ .hero-rings{right:-320px;opacity:.7}
+ .hero-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<nav><div class="container">
+ <a href="#home" class="logo">Aurelia <span>Jewels</span></a>
+ <button class="menu-toggle" onclick="document.querySelector('.links').classList.toggle('open')">☰</button>
+ <div class="links" onclick="this.classList.remove('open')">
+  <a href="#home">Home</a><a href="#about">About</a><a href="#products">Products</a><a href="#contact">Contact</a>
+  <button class="cart-btn" onclick="event.stopPropagation();openCart()">Cart (<span id="cc">0</span>)</button>
+ </div>
+</div></nav>
+
+<section id="home">
+ <div class="hero-rings"></div><div class="hero-orb"></div>
+ <div class="container hero-grid">
+  <div class="hero-text">
+   <div class="eyebrow">Islamabad · Handcrafted Jewellery</div>
+   <h1>Jewellery that feels like <em>you</em></h1>
+   <p>Necklaces, earrings, rings and bracelets designed with quiet elegance, in warm mocha tones and finishes made for everyday and festive wear.</p>
+   <a href="#products" class="btn">Shop Collection</a><a href="#about" class="btn ghost">Our Story</a>
+   <div class="hero-badges"><span>Cash on Delivery</span><span>Card Payment</span><span>Delivered from Islamabad</span></div>
+  </div>
+  <div class="hero-panel">
+   <div class="ptitle">Shop by collection</div>
+   <div class="psub">Four collections, one effortless style</div>
+   <a class="cat-link" href="#products"><span>01</span>Necklaces &amp; Chains<i>→</i></a>
+   <a class="cat-link" href="#products"><span>02</span>Earrings<i>→</i></a>
+   <a class="cat-link" href="#products"><span>03</span>Rings<i>→</i></a>
+   <a class="cat-link" href="#products"><span>04</span>Bracelets<i>→</i></a>
+  </div>
+ </div>
+</section>
+
+<section id="about"><div class="container grid">
+ <div>
+  <div class="eyebrow" style="color:#e6c9a8">About us</div>
+  <h2>Aurelia Jewels</h2>
+  <p>Aurelia Jewels is an Islamabad-based jewellery brand built around simple, graceful design. Every piece is chosen for its finish, its feel and the way it lasts through years of wear.</p>
+  <p>We bring together cosmic latte, mocha cream and deep burgundy tones in our collections, so each piece pairs easily with everyday and festive outfits alike.</p>
+  <div class="stats"><div><b>4</b><span>Collections</span></div><div><b>100%</b><span>Careful finishing</span></div><div><b>COD</b><span>& Card payments</span></div></div>
+ </div>
+ <div class="about-card"><h3>Crafted with care</h3><p>From first sketch to final polish, we keep every detail considered.</p></div>
+</div></section>
+
+<section id="products"><div class="container">
+ <div class="sec-title"><h2>Our Collections</h2><p>Choose from four categories</p></div>
+ <div id="catalog"><p style="text-align:center;color:var(--concrete)">Loading products…</p></div>
+</div></section>
+
+<section id="contact"><div class="container">
+ <div class="sec-title"><h2>Get in touch</h2><p>We would love to hear from you</p></div>
+ <div class="contact-grid">
+  <div class="contact-box">
+   <p><b>Phone / WhatsApp:</b><br><a href="tel:03006009889">0300 6009889</a></p>
+   <p><b>Address:</b><br>Islamabad, Pakistan</p>
+   <p><b>Payment:</b><br>Cash on Delivery or Card</p>
+  </div>
+  <form class="contact-box" onsubmit="return sendMsg(event)">
+   <input id="cn" placeholder="Your name" required>
+   <input id="cp" placeholder="Your phone" required>
+   <textarea id="cm" rows="4" placeholder="Your message" required></textarea>
+   <button class="btn" type="submit">Send on WhatsApp</button>
+  </form>
+ </div>
+</div></section>
+
+<footer><div class="container">
+ <div class="foot">
+  <div><h4>Aurelia Jewels</h4><p style="font-size:.9rem">Elegant jewellery from Islamabad, Pakistan.</p></div>
+  <div><h4>Explore</h4><a href="#home">Home</a><a href="#about">About</a><a href="#products">Products</a><a href="#contact">Contact</a></div>
+  <div><h4>Contact</h4><a href="tel:03006009889">0300 6009889</a><a>Islamabad, Pakistan</a></div>
+ </div>
+ <div class="copy">© <span id="yr"></span> Aurelia Jewels. All rights reserved.</div>
+</div></footer>
+
+<div class="overlay" id="ov" onclick="closeAll()"></div>
+<aside class="drawer" id="drawer">
+ <header><h3>Your Cart</h3><button class="x" onclick="closeAll()">×</button></header>
+ <div class="cart-items" id="items"></div>
+ <footer><div class="tot"><span>Total</span><span id="total">Rs 0</span></div><button class="btn" style="width:100%" onclick="openCheckout()">Checkout</button></footer>
+</aside>
+
+<div class="modal" id="checkout"><div class="mbox">
+ <h3>Checkout</h3>
+ <form onsubmit="return placeOrder(event)">
+  <input id="f_name" placeholder="Full name" required>
+  <input id="f_phone" placeholder="Phone number" required>
+  <input id="f_city" placeholder="City" required>
+  <textarea id="f_addr" rows="2" placeholder="Full delivery address" required></textarea>
+  <div class="pay">
+   <label><input type="radio" name="pay" value="COD" checked> Cash on Delivery</label>
+   <label><input type="radio" name="pay" value="Card"> Card Payment</label>
+  </div>
+  <p class="note" id="paynote">Pay in cash when your order arrives.</p>
+  <div class="tot"><span>Total</span><span id="ctotal"></span></div>
+  <button class="btn" id="pbtn" type="submit" style="width:100%">Place Order</button>
+  <button class="btn ghost" type="button" style="width:100%;margin:8px 0 0" onclick="closeAll()">Cancel</button>
+ </form>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbyMujgiphG52bJoSsidVKj6L9e94P6j23-2EgkXz2dfDizdIYYhHKdJQMXHzSK_l9WkMQ/exec";
+const WHATSAPP="923006009889";
+const CATS=["Necklaces & Chains","Earrings","Rings","Bracelets"];
+let products=[],cart=JSON.parse(localStorage.getItem("aj_cart")||"[]");
+document.getElementById("yr").textContent=new Date().getFullYear();
+const fmt=n=>"Rs "+Number(n).toLocaleString("en-PK");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",2800)}
+
+async function loadProducts(){
+ try{const r=await fetch(API_URL+"?action=products");const d=await r.json();if(!d.ok)throw 0;products=d.products}
+ catch(e){products=[];toast("Could not load live products")}
+ render();
+}
+function render(){
+ const box=document.getElementById("catalog");box.innerHTML="";
+ CATS.forEach(c=>{
+  const list=products.filter(p=>p.category===c);
+  const slots=list.length?list:[1,2,3].map(i=>({placeholder:true,name:c+" "+i,price:0,quantity:0}));
+  const sec=document.createElement("div");sec.className="cat";
+  sec.innerHTML=`<h3>${esc(c)}</h3><div class="grid3">${slots.map(p=>card(p)).join("")}</div>`;
+  box.appendChild(sec);
+ });
+}
+function card(p){
+ const img=p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer">`:"Image placeholder";
+ if(p.placeholder)return `<div class="card"><div class="img">${img}</div><div class="info"><h4>${esc(p.name)}</h4><p>Coming soon</p></div></div>`;
+ const out=p.quantity<=0;
+ return `<div class="card"><div class="img">${img}</div><div class="info"><h4>${esc(p.name)}</h4><p>${esc(p.description)}</p>
+ <div class="row"><div><div class="price">${fmt(p.price)}</div><div class="stock">${out?"Out of stock":p.quantity<=3?"Only "+p.quantity+" left":"In stock"}</div></div>
+ <button class="add" ${out?"disabled":""} onclick="addCart('${esc(p.id)}')">${out?"Sold out":"Add to cart"}</button></div></div></div>`;
+}
+function save(){localStorage.setItem("aj_cart",JSON.stringify(cart));updateCart()}
+function addCart(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const it=cart.find(x=>x.id===id);
+ if(it){if(it.qty>=p.quantity)return toast("No more stock available");it.qty++}else cart.push({id,qty:1});
+ save();toast("Added to cart");
+}
+function chg(id,d){
+ const it=cart.find(x=>x.id===id),p=products.find(x=>x.id===id);if(!it)return;
+ it.qty+=d;if(p&&it.qty>p.quantity)it.qty=p.quantity;
+ if(it.qty<=0)cart=cart.filter(x=>x.id!==id);save();
+}
+function cartTotal(){return cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0)}
+function updateCart(){
+ document.getElementById("cc").textContent=cart.reduce((s,i)=>s+i.qty,0);
+ const el=document.getElementById("items");
+ cart=cart.filter(i=>products.find(p=>p.id===i.id)||!products.length);
+ el.innerHTML=cart.length?cart.map(i=>{const p=products.find(x=>x.id===i.id);if(!p)return"";
+  return `<div class="ci"><div class="t">${p.image_url?`<img src="${esc(p.image_url)}" referrerpolicy="no-referrer">`:""}</div><div class="m"><b>${esc(p.name)}</b><br>${fmt(p.price)}</div>
+  <div class="qty"><button onclick="chg('${esc(i.id)}',-1)">−</button> ${i.qty} <button onclick="chg('${esc(i.id)}',1)">+</button></div></div>`}).join(""):"<p style='color:var(--concrete);padding:20px 0'>Your cart is empty.</p>";
+ document.getElementById("total").textContent=fmt(cartTotal());
+}
+function openCart(){updateCart();ov.classList.add("open");drawer.classList.add("open")}
+function closeAll(){ov.classList.remove("open");drawer.classList.remove("open");checkout.classList.remove("open")}
+function openCheckout(){if(!cart.length)return toast("Cart is empty");drawer.classList.remove("open");ov.classList.add("open");ctotal.textContent=fmt(cartTotal());checkout.classList.add("open")}
+document.querySelectorAll('input[name=pay]').forEach(r=>r.onchange=()=>{
+ paynote.textContent=r.value==="Card"&&r.checked?"After placing the order, we will contact you on your phone to complete the secure card payment.":(r.checked&&r.value==="COD"?"Pay in cash when your order arrives.":paynote.textContent)});
+async function placeOrder(e){
+ e.preventDefault();const b=pbtn;b.disabled=true;b.textContent="Placing order…";
+ const payload={action:"order",payment:document.querySelector('input[name=pay]:checked').value,
+  customer:{name:f_name.value,phone:f_phone.value,city:f_city.value,address:f_addr.value},items:cart};
+ try{
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+  const d=await r.json();
+  if(!d.ok){toast(d.error||"Order failed");await loadProducts()}
+  else{cart=[];save();closeAll();toast("Order placed! ID: "+d.order_id);await loadProducts();e.target.reset()}
+ }catch(err){toast("Network error, please try again")}
+ b.disabled=false;b.textContent="Place Order";return false;
+}
+function sendMsg(e){e.preventDefault();
+ const t=`Hello Aurelia Jewels, I am ${cn.value} (${cp.value}). ${cm.value}`;
+ window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(t),"_blank");return false}
+
+
+loadProducts();updateCart();
+</script>
+</body>
+</html>

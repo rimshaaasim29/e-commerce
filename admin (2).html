@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Aurelia Admin</title>
+<style>
+:root{--sage:#5b1a2e;--sage-d:#5b1a2e;--concrete:#8a7466;--concrete-l:#eadfc9;--amber:#9a6a4a;--bg:#fff8e7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,Inter,sans-serif;background:var(--bg);color:#2b1a1c;font-size:14px}
+h1,h2{color:var(--sage-d)}
+.wrap{max-width:1200px;margin:0 auto;padding:20px}
+header{background:var(--sage-d);color:#fff}
+header .wrap{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
+header h1{color:#fff;font-size:1.3rem}
+button,.btn{background:var(--amber);color:#fff;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;font-weight:600;font-size:.88rem}
+button.sec{background:var(--concrete)}
+button.dng{background:#a33}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid #dccdb5;border-radius:8px;font:inherit;background:#fff}
+label{display:block;font-size:.78rem;color:var(--concrete);margin:8px 0 3px}
+.login{max-width:340px;margin:12vh auto;background:#fff;padding:30px;border-radius:14px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.login input{margin:14px 0}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{background:#fff;color:var(--sage-d);border:1px solid var(--concrete-l)}
+.tabs button.on{background:var(--sage-d);color:#fff}
+.panel{background:#fff;border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+.form{display:grid;grid-template-columns:repeat(4,1fr);gap:0 14px}
+.form .full{grid-column:1/-1}
+.form .two{grid-column:span 2}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--concrete-l);vertical-align:middle}
+th{font-size:.75rem;text-transform:uppercase;color:var(--concrete)}
+.thumb{width:46px;height:46px;border-radius:6px;background:var(--concrete-l);object-fit:cover}
+.low{color:#a33;font-weight:700}
+.msg{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2b1a1c;color:#fff;padding:10px 20px;border-radius:24px;display:none;z-index:9}
+.hide{display:none}
+@media(max-width:760px){.form{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="loginView" class="login">
+ <h2>Aurelia Jewels</h2><p style="color:var(--concrete)">Admin Dashboard</p>
+ <input id="pw" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+ <button style="width:100%" onclick="login()">Login</button>
+</div>
+
+<div id="app" class="hide">
+ <header><div class="wrap"><h1>Aurelia Jewels · Admin</h1><div><a class="btn sec" href="index.html" style="text-decoration:none;display:inline-block;margin-right:6px">View site</a><button class="sec" onclick="logout()">Logout</button></div></div></header>
+ <div class="wrap">
+  <div class="tabs"><button id="t1" class="on" onclick="tab(1)">Products</button><button id="t2" onclick="tab(2)">Orders</button></div>
+
+  <div id="p1">
+   <div class="panel">
+    <h2 id="ftitle" style="margin-bottom:6px">Add product</h2>
+    <div class="form">
+     <input type="hidden" id="id">
+     <div class="two"><label>Name</label><input id="name"></div>
+     <div><label>Category</label><select id="category"></select></div>
+     <div><label>Active (visible on site)</label><select id="active"><option value="true">Yes</option><option value="false">No</option></select></div>
+     <div><label>Price (Rs)</label><input id="price" type="number" min="0"></div>
+     <div><label>Quantity</label><input id="quantity" type="number" min="0"></div>
+     <div class="two"><label>Image URL (or upload below)</label><input id="image_url" placeholder="https://..."></div>
+     <div class="two"><label>Upload image</label><input id="file" type="file" accept="image/*"></div>
+     <div class="two"><label>Preview</label><img id="prev" class="thumb" style="width:80px;height:80px" alt=""></div>
+     <div class="full"><label>Description</label><textarea id="description" rows="2"></textarea></div>
+    </div>
+    <div style="margin-top:12px"><button id="saveBtn" onclick="saveProduct()">Save product</button> <button class="sec" onclick="resetForm()">Clear</button></div>
+   </div>
+   <div class="panel"><h2 style="margin-bottom:10px">All products</h2>
+    <div class="table-wrap"><table><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Active</th><th></th></tr></thead><tbody id="plist"></tbody></table></div>
+   </div>
+  </div>
+
+  <div id="p2" class="hide">
+   <div class="panel"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><h2>Orders</h2><button class="sec" onclick="loadOrders()">Refresh</button></div>
+    <div class="table-wrap"><table><thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Address</th><th>Payment</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody id="olist"></tbody></table></div>
+   </div>
+  </div>
+ </div>
+</div>
+<div class="msg" id="msg"></div>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbyMujgiphG52bJoSsidVKj6L9e94P6j23-2EgkXz2dfDizdIYYhHKdJQMXHzSK_l9WkMQ/exec";
+const CATS=["Necklaces & Chains","Earrings","Rings","Bracelets"];
+const STATUSES=["New (COD)","Awaiting card payment","Paid","Shipped","Delivered","Cancelled"];
+let PW=sessionStorage.getItem("aj_pw")||"",products=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function msg(t){const m=$("msg");m.textContent=t;m.style.display="block";clearTimeout(m._h);m._h=setTimeout(()=>m.style.display="none",3000)}
+$("category").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+
+async function get(action){const r=await fetch(`${API_URL}?action=${action}&pw=${encodeURIComponent(PW)}`);return r.json()}
+async function post(body){const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({pw:PW,...body})});return r.json()}
+
+async function login(){
+ PW=$("pw").value||PW;
+ try{const d=await get("adminProducts");
+  if(!d.ok){PW="";return msg(d.error||"Wrong password")}
+  sessionStorage.setItem("aj_pw",PW);$("loginView").classList.add("hide");$("app").classList.remove("hide");products=d.products;renderProducts();loadOrders();
+ }catch(e){msg("Could not reach the backend")}
+}
+function logout(){sessionStorage.removeItem("aj_pw");location.reload()}
+function tab(n){$("p1").classList.toggle("hide",n!==1);$("p2").classList.toggle("hide",n!==2);$("t1").classList.toggle("on",n===1);$("t2").classList.toggle("on",n===2)}
+
+function renderProducts(){
+ $("plist").innerHTML=products.map(p=>`<tr><td>${p.image_url?`<img class="thumb" src="${esc(p.image_url)}" referrerpolicy="no-referrer">`:`<div class="thumb"></div>`}</td>
+ <td>${esc(p.name)}</td><td>${esc(p.category)}</td><td>Rs ${Number(p.price).toLocaleString()}</td>
+ <td class="${p.quantity<=0?"low":""}">${p.quantity}</td><td>${String(p.active).toLowerCase()==="true"?"Yes":"No"}</td>
+ <td><button class="sec" onclick="edit('${esc(p.id)}')">Edit</button> <button class="dng" onclick="del('${esc(p.id)}')">Delete</button></td></tr>`).join("")||"<tr><td colspan=7>No products</td></tr>";
+}
+function edit(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ ["id","name","category","price","quantity","image_url","description"].forEach(k=>$(k).value=p[k]??"");
+ $("active").value=String(p.active).toLowerCase()==="true"?"true":"false";
+ $("prev").src=p.image_url||"";$("ftitle").textContent="Edit product";scrollTo({top:0,behavior:"smooth"});
+}
+function resetForm(){["id","name","price","quantity","image_url","description"].forEach(k=>$(k).value="");$("file").value="";$("prev").removeAttribute("src");$("ftitle").textContent="Add product"}
+$("image_url").oninput=()=>$("prev").src=$("image_url").value;
+
+$("file").onchange=async()=>{
+ const f=$("file").files[0];if(!f)return;msg("Uploading image…");
+ try{
+  const b64=await shrink(f);
+  const d=await post({action:"uploadImage",data:b64,mime:"image/jpeg"});
+  if(!d.ok)return msg(d.error||"Upload failed");
+  $("image_url").value=d.url;$("prev").src=d.url;msg("Image uploaded");
+ }catch(e){msg("Upload failed")}
+};
+function shrink(file){return new Promise((res,rej)=>{
+ const img=new Image();img.onload=()=>{const m=900,s=Math.min(1,m/Math.max(img.width,img.height));
+  const c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+  res(c.toDataURL("image/jpeg",.85).split(",")[1])};
+ img.onerror=rej;img.src=URL.createObjectURL(file)})}
+
+async function saveProduct(){
+ if(!$("name").value||$("price").value===""||$("quantity").value==="")return msg("Name, price and quantity are required");
+ const p={id:$("id").value,name:$("name").value,category:$("category").value,price:$("price").value,quantity:$("quantity").value,
+  image_url:$("image_url").value,active:$("active").value==="true",description:$("description").value};
+ $("saveBtn").disabled=true;
+ const d=await post({action:"saveProduct",product:p});$("saveBtn").disabled=false;
+ if(!d.ok)return msg(d.error||"Save failed");
+ msg("Saved");resetForm();refresh();
+}
+async function del(id){if(!confirm("Delete this product?"))return;const d=await post({action:"deleteProduct",id});if(d.ok){msg("Deleted");refresh()}else msg(d.error)}
+async function refresh(){const d=await get("adminProducts");if(d.ok){products=d.products;renderProducts()}}
+
+async function loadOrders(){
+ const d=await get("orders");if(!d.ok)return msg(d.error);
+ $("olist").innerHTML=d.orders.map(o=>`<tr><td>${esc(o.order_id)}</td><td>${new Date(o.date).toLocaleString()}</td>
+ <td>${esc(o.name)}<br>${esc(o.phone)}</td><td>${esc(o.address)}, ${esc(o.city)}</td><td>${esc(o.payment)}</td><td>${esc(o.items)}</td>
+ <td>Rs ${Number(o.total).toLocaleString()}</td>
+ <td><select onchange="setStatus('${esc(o.order_id)}',this.value)">${STATUSES.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("")||"<tr><td colspan=8>No orders yet</td></tr>";
+}
+async function setStatus(id,status){const d=await post({action:"orderStatus",order_id:id,status});msg(d.ok?"Status updated":d.error)}
+if(PW)login();
+</script>
+</body>
+</html>
